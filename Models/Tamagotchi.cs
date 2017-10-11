@@ -10,46 +10,71 @@ namespace Tamagotchi.Models
         public int Hunger {get; set;}
         public int Sleep {get; set;}
         public int Thirst {get; set;}
+        public bool Dead {get; set;}
+        public static List<Pet> Pets = new List<Pet> {};
+        public static int LastUpdate {get;, set;}
 
-        public List<Pet> Pets = new List<Pet> {};
-
-        private static Dictionary<string, Pet> _types = new Dictionary<string, Pet>()
+        public Pet (string name, int hunger = 80, int sleep = 80, int thirst = 80)
         {
-            {"Normal", new Pet(80,80,80)},
-            {"Hungry", new Pet(50,80,80)},
-            {"Sleepy", new Pet(80,50,80)},
-            {"Thirsty", new Pet(80,80,50)}
-        };
-
-        public Pet (int hunger, int sleep, int thirst)
-        {
+            Time();
+            Name = name;
             Hunger = hunger;
             Sleep = sleep;
             Thirst = thirst;
             Id = Pets.Count;
+            Pets.Add(this);
+            Dead = false;
         }
 
-        public static List<Pet> AdoptPet(string type, string name)
+        public static List<Pet> GetList()
         {
-            Pet referencePet = _types[type];
-            Pet newPet = new Pet (referencePet.Hunger, referencePet.Sleep, referencePet.Thirst);
-            Pet.Name = name;
-            Pets.Add(newPet);
-            return(Pets);
+            return Pets;
         }
 
-        public void TimePass()
+        public static int Clamp(int number, int min, int max)
         {
-            Hunger -= 10;
-            Sleep -= 10;
-            Thirst -= 10;
+            if (number > max)
+            {
+                return max;
+            }
+            else if (number < min)
+            {
+                return min;
+            }
+            else
+            {
+                return number;
+            }
         }
 
-        public void updatePet(int hunger, int sleep, int thirst)
+        public void ChangePetStatus(int water, int food, int sleep)
         {
-            Hunger += hunger;
-            Sleep += sleep;
-            Thirst += thirst;
+            if (Dead == false) {
+                Thirst = Clamp(Thirst += water, 0, 100);
+                Hunger = Clamp(Hunger += food, 0, 100);
+                Sleep = Clamp(Sleep += sleep, 0, 100);
+            }
+        }
+
+        public static void Time()
+        {
+
+            int timeDiff = EpochTime() - LastUpdate;
+            int loss = Math.Floor(timeDiff * -0.1);
+            foreach (Pet pet in Pets) {
+                pet.ChangePetStatus(loss,loss,loss);
+                if (pet.Thirst <= 0 || pet.Hunger <= 0 || pet.Sleep <= 0)
+                {
+                    pet.Dead = true;
+                }
+            }
+            LastUpdate = EpochTime();
+        }
+
+        public static int EpochTime()
+        {
+            TimeSpan span = DateTime.UtcNow - new DateTime(1970, 1, 1);
+            return (int)span.TotalSeconds;
         }
 
     }
