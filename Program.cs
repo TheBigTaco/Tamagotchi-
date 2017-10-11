@@ -1,7 +1,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Parcel
+namespace Rename
 {
   public class Program
   {

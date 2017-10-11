@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using System;
 
-namespace FriendLetter.Controllers
+namespace Rename.Controllers
 {
     public class HomeController : Controller
     {
-      //PARCEL STUFF -- Adam
+      
     }
 }
