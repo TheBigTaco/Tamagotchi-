@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Threading;
 
 namespace Tamagotchi.Models
 {
@@ -13,9 +13,12 @@ namespace Tamagotchi.Models
         public int Thirst {get; set;}
         public bool Dead {get; set;}
         public static List<Pet> Pets = new List<Pet> {};
+        private Timer timer;
 
         public Pet (string name, int hunger = 80, int sleep = 80, int thirst = 80)
         {
+            timer = new Timer(this.TimerTick, null, 0, 1000);
+
             Name = name;
             Hunger = hunger;
             Sleep = sleep;
@@ -23,6 +26,10 @@ namespace Tamagotchi.Models
             Id = Pets.Count;
             Pets.Add(this);
             Dead = false;
+        }
+        private void TimerTick(Object stateInfo)
+        {
+            Time(1);
         }
 
         public static List<Pet> GetList()
@@ -61,9 +68,6 @@ namespace Tamagotchi.Models
                 if (pet.Thirst <= 0 || pet.Hunger <= 0 || pet.Sleep <= 0)
                 {
                     pet.Dead = true;
-                    pet.Thirst = 0;
-                    pet.Hunger = 0;
-                    pet.Sleep = 0;
                 }
             }
         }
