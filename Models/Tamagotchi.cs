@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 
+
 namespace Tamagotchi.Models
 {
     public class Pet
@@ -12,11 +13,9 @@ namespace Tamagotchi.Models
         public int Thirst {get; set;}
         public bool Dead {get; set;}
         public static List<Pet> Pets = new List<Pet> {};
-        public static int LastUpdate {get;, set;}
 
         public Pet (string name, int hunger = 80, int sleep = 80, int thirst = 80)
         {
-            Time();
             Name = name;
             Hunger = hunger;
             Sleep = sleep;
@@ -55,27 +54,18 @@ namespace Tamagotchi.Models
                 Sleep = Clamp(Sleep += sleep, 0, 100);
             }
         }
-
-        public static void Time()
+        public static void Time(int hours)
         {
-
-            int timeDiff = EpochTime() - LastUpdate;
-            int loss = Math.Floor(timeDiff * -0.1);
             foreach (Pet pet in Pets) {
-                pet.ChangePetStatus(loss,loss,loss);
+                pet.ChangePetStatus(-hours,-hours,-hours);
                 if (pet.Thirst <= 0 || pet.Hunger <= 0 || pet.Sleep <= 0)
                 {
                     pet.Dead = true;
+                    pet.Thirst = 0;
+                    pet.Hunger = 0;
+                    pet.Sleep = 0;
                 }
             }
-            LastUpdate = EpochTime();
         }
-
-        public static int EpochTime()
-        {
-            TimeSpan span = DateTime.UtcNow - new DateTime(1970, 1, 1);
-            return (int)span.TotalSeconds;
-        }
-
     }
 }
