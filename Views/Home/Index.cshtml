@@ -1,0 +1,38 @@
+@using Tamagotchi.Models;
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Tamagotchi</title>
+  </head>
+  <body>
+    <form action="/pet/add" method="post">
+      <label for="name">Enter your Tamagotchi's name</label>
+      <input type="text" name="name" id="name">
+      <label for="type">Select your type</label>
+      <select name="type" id="type">
+        <option>Normal</option>
+        <option>Hungry</option>
+        <option>Sleepy</option>
+        <option>Thirsty</option>
+      </select>
+      <button type="submit" name="button">Add a Tamagotchi!</button>
+    <ul>
+      @foreach(Pets pet in Models)
+      {
+        <li>@
+        </form>
+        <form action="/" method="post">
+
+        </form>
+        <form action="/" method="post">
+
+        </form>
+        <form action="/" method="post">
+
+        </form>
+      }
+    </ul>
+  </body>
+</html>
